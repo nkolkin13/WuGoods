@@ -1,0 +1,178 @@
+/* set color of background text */
+.error {
+	color: #FF0000;
+}
+
+/* background info */
+body{
+	background-color: #FCF8CA
+}
+header{
+	background-color: #293333;
+	color: #FFFFFF;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+
+}
+
+
+/* header info */
+h1{
+	margin: 5px;
+	text-align: center;
+}
+
+/* navigation bar */
+nav {
+	display: block;
+	margin-bottom: 10px;
+}
+nav ul {
+	list-style: none;
+	font-size: 14px;
+	background-color: #545C5C;
+	-webkit-border-radius: 0px 0px 5px 5px;
+	-moz-border-radius: 0px 0px 5px 5px;
+	border-radius: 0px 0px 5px 5px;
+	overflow: hidden;
+}
+
+}
+nav ul li {
+	display: inline;
+}
+nav ul li a {
+	display: block;
+	float: left;
+	padding: 3px 6px;
+	color: #FFFFFF;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+nav ul li a:hover {
+	background: #767D7D;
+	color: #FFFFFF;
+    -webkit-border-radius: 3px;  
+    -moz-border-radius: 3px;  
+    border-radius: 3px;  
+    padding: 3px 6px;  
+    margin: 0;  
+    text-decoration: none;  
+}
+
+
+
+/* content core */
+div#core {
+	display:block;
+	clear: both;
+	width: auto;
+	height: 400px;
+	margin-bottom: 20px;
+	margin-left: 5%;
+	margin-right: 5%;
+	background: #293333 url('../img/AntiqueShopBackground.jpg') no-repeat center center fixed;
+	-webkit-background-size: cover;
+  	-moz-background-size: cover;
+ 	-o-background-size: cover;
+ 	background-size: cover;
+	border-radius: 10px;  
+	position:relative;
+}
+
+div#welcomeBlurb {
+	height: 200px;
+	width: 600px;
+	max-width: 100%;
+	text-align: justify;
+	background-color: #FFFFFF;
+	opacity: 0.9;
+	border-radius: 10px;
+	margin: auto;
+	overflow: hidden;
+	position:relative;
+	top:100px;
+
+}
+
+section#left {
+	width: 45%;
+	float: left;
+	text-align: center;
+}
+
+section#right {
+	width: 45%;
+	float: right;
+	text-align: center;
+}
+
+div#welcomeBlurb p{
+	margin: 20px;
+}
+
+div#welcomeBlurb a{
+	display: block;
+	color: #000000;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+div#welcomeBlurb a:hover{
+	background: #767D7D;
+	color: #FFFFFF;
+    -webkit-border-radius: 3px;  
+    -moz-border-radius: 3px;  
+    border-radius: 3px;  
+    text-decoration: none;  
+}
+
+section#left p{
+	margin: 20px;
+}
+
+section#right p{
+	margin: 20px;
+}
+
+section#left h2{
+	text-align: center;
+}
+
+section#right h2{
+	text-align: center;
+}
+
+
+/* clearfix */
+.clearfix:after{
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+
+.clearfix {
+	display: inline-block;
+}
+
+.frontInfo {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+
+}
+
+html[xmlns] .clearfix {
+	display: block;
+}
+
+* html .clearfix {
+	height: 1%
+}
+
+	
