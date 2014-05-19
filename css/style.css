@@ -167,6 +167,10 @@ section#right h2{
 
 }
 
+.itemPreview{
+	/*FILL THIS IN TIA, see changes in itemList.php*/
+}
+
 html[xmlns] .clearfix {
 	display: block;
 }

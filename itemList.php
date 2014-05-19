@@ -34,6 +34,7 @@
 					echo '<h2><a rel="external" href= "#">' . $row["itemTitle"] . "</a></h2>";
 					echo "<p>Seller's Name: " .$row["sellerName"] . "</p>"; 
 					echo "<p>Price: $" .$row["dollarValue"] . ".00</p>"; 
+					echo '<img src= "'.$row["picLocation"]. '" alt = "' .$row["picLocation"]. '">';
 					echo "</div>";
 				}
 
