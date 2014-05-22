@@ -22,13 +22,53 @@
 		</header>
 
 		<div id = "itemListings" class="clearfix">
+			<form method= "post">
+				Seller Name Contains: <input type="text" name="sellerNameQuery"> Item Name Contains: <input type="text" name="itemNameQuery">
+				<br>Tags: <input type = "checkbox" name="furnitureCheck" value = "FURN">Furniture
+					<input type = "checkbox" name="bookCheck" value = "BOOK">Book
+					<input type = "checkbox" name="miscCheck" value = "MISC">Misc
+					<br>Sort By: <select name="sortCriteriaDrop">
+					<option value="priceASC">Price, Low to High</option>
+					<option value="priceDESC">Price, High to Low</option>
+				</select>
+
+				<input type="submit" name="postItem" value = "Search">
+			</form>
 			<?php
+
+				//define search
+				$searchQuery = "";
+				if (!empty($_POST['sellerNameQuery'])){ $searchQuery .= "AND sellerName LIKE '%".$_POST['sellerNameQuery']."%'"; }
+				if (!empty($_POST['itemNameQuery'])){ $searchQuery .= "AND itemTitle LIKE '%".$_POST['itemNameQuery']."%'"; }
+
+				//defines query
+				$query = "";
+				if(isset($_POST['furnitureCheck'])){
+					$query .= " FURN";
+				}
+				if(isset($_POST['bookCheck'])){
+					$query .= " BOOK";
+				}
+				if(isset($_POST['miscCheck'])){
+					$query .= " MISC";
+				}
+
+				//defines sorting
+				$sortCriteria = "";
+				if (!empty($_POST['sortCriteriaDrop'])) {
+					if($_POST['sortCriteriaDrop'] == 'priceASC'){
+						$sortCriteria = 'ORDER BY dollarValue ASC';
+					}
+					if($_POST['sortCriteriaDrop'] == 'priceDESC'){
+						$sortCriteria = 'ORDER BY dollarValue DESC';
+					}
+				}
 				$con=mysqli_connect("localhost","root","","wubooksdb");
 				// Check connection
 				if (mysqli_connect_errno()) {
 				  echo "Failed to connect to MySQL: " . mysqli_connect_error();
 				}
-				$result=mysqli_query($con, "SELECT * FROM itemsforsale");
+				$result=mysqli_query($con, "SELECT * FROM itemsforsale WHERE category LIKE '%$query%' $searchQuery $sortCriteria");
 				while ($row = mysqli_fetch_array($result)){
 					echo '<div class ="itemPreview"';
 					echo '<h2><a rel="external" href= "#">' . $row["itemTitle"] . "</a></h2>";

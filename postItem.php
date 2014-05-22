@@ -61,6 +61,7 @@
 			$allowedExts = array("gif", "jpeg", "jpg", "png");
 			$temp = explode(".",$_FILES["itemPicture"]["name"]);
 			$extension = end($temp);
+			$picLocation = "";
 			if ((($_FILES["itemPicture"]["type"] == "image/gif")
 				||($_FILES["itemPicture"]["type"] == "image/jpeg")
 				|| ($_FILES["itemPicture"]["type"] == "image/jpg")
@@ -75,18 +76,18 @@
 					$errors['itemPicture']=$_FILES["itemPicture"]["error"];
 				}else{
 					if (file_exists("upload/".$_FILES["itemPicture"]["name"])){
-						$picErr = "picture with same name already on server";
+						$picErr = "picture with same name already on server, please rename your file";
 						$errors['itemPicture']="picture with same name already on server";
 					}else{
-						echo SITE_ROOT."upload/".$_FILES["itemPicture"]["name"];
-						move_uploaded_file($_FILES["itemPicture"]["tmp_name"], SITE_ROOT."/upload/".$_FILES["itemPicture"]["name"]);
+						$picLocation = "upload/".$_FILES["itemPicture"]["name"];
+						move_uploaded_file($_FILES["itemPicture"]["tmp_name"], SITE_ROOT."/".$picLocation);
 					}
 				}
 
 
 			}else{
-				$picErr = "file was not a picture under 60 kB (jpeg, jpg, gif, or png)";
-				$errors['itemPicture']= "invalid picture file";
+				$picErr = "No valid image file specified, default image used";
+				$picLocation =  "upload/default.jpeg";
 			}
 
 
@@ -98,25 +99,39 @@
 					echo "Failed to connect to MySQL: " . mysqli_connect_error();
 				}
 
-				$sql="CREATE TABLE itemsForSale(sellerName CHAR(30),itemTitle CHAR(30),dollarValue INT, picLocation CHAR(100))";
+				$sql="CREATE TABLE itemsForSale(sellerName CHAR(30),itemTitle CHAR(30),dollarValue INT, picLocation CHAR(255), category CHAR(255))";
 				if (mysqli_query($con, $sql)){
 					echo "table itemsForSale created successfully";
 				} else {
 					echo "Error creating database: " . mysqli_error($con);
+				}
+				$sql="ALTER TABLE itemsForSale ADD UNIQUE INDEX(sellerName, itemTitle)";
+
+				//sets category
+				$category = "";
+				if(isset($_POST['furnitureCheck'])){
+					$category .= " FURN";
+				}
+				if(isset($_POST['bookCheck'])){
+					$category .= " BOOK";
+				}
+				if(isset($_POST['miscCheck'])){
+					$category .= " MISC";
 				}
 
 				// escape variables for security
 				$name = mysqli_real_escape_string($con, $_POST['name']);
 				$itemName = mysqli_real_escape_string($con, $_POST['itemName']);
 				$price = mysqli_real_escape_string($con, $_POST['price']);
-				$itemPictureLocation= mysqli_real_escape_string($con,"upload/".$_FILES["itemPicture"]["name"]);
+				$itemPictureLocation= mysqli_real_escape_string($con, $picLocation);
+				$itemTags= mysqli_real_escape_string($con, $category);
 
-				$sql="INSERT INTO itemsForSale (sellerName, itemTitle, dollarValue, picLocation) VALUES ('$name', '$itemName', '$price','$itemPictureLocation')";
+				$sql="INSERT IGNORE INTO itemsForSale (sellerName, itemTitle, dollarValue, picLocation, category) VALUES ('$name', '$itemName', '$price','$itemPictureLocation','$itemTags')";
 
 				if (!mysqli_query($con,$sql)) {
 				  die('Error: ' . mysqli_error($con));
 				}
-				echo "1 record added";
+				$itemName = $name = $price = "";
 
 				mysqli_close($con);
 			}
@@ -159,8 +174,11 @@
 				Item Name: <input type="text" name="itemName" value="<?php echo $itemName;?>"> <span class="error">* <?php echo $itemNameErr;?></span> <br>
 				Seller Name: <input type="text" name="name" value="<?php echo $name;?>"><span class="error">* <?php echo $nameErr;?></span> <br>
 				Price: $<input type="text" name="price" value="<?php echo $price;?>"><span class="error">* <?php echo $priceErr;?></span> <br>
-				Price: $<input type="file" name="itemPicture" id="itemPicture" <span class="error"><?php echo $picErr;?></span> <br>
-
+				Picture: <input type="file" name="itemPicture" id="itemPicture"  value = "Upload Picture"><span class="error"><?php echo $picErr;?></span> <br>
+				Tags: <br>
+					-<input type = "checkbox" name="furnitureCheck" value = "FURN">Furniture<br>
+					-<input type = "checkbox" name="bookCheck" value = "BOOK">Book<br>
+					-<input type = "checkbox" name="miscCheck" value = "MISC">Misc<br>
 				<input type="submit" name="postItem" value = "Post Item">
 			</form>
 		</div>
